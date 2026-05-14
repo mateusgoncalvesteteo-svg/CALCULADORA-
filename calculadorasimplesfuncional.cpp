@@ -8,8 +8,7 @@ using namespace std;//estou mais acostumado a usar assim, talvez mais pra frente
 // 06/05/2026 19:34 , quero adicionar mais operacoes [:)]
 
 double soma(double num1, double num2) {
-    // aqui começara umas modificacoes muito massa
-    // que é transformar cada operacao da calculadora em funcoes
+    // criei uma funcao para cada operacao da calculadora, assim a main fica bem mais limpa
 
     return num1 + num2;
 }
