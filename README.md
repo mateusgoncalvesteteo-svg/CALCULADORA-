@@ -11,4 +11,4 @@ Ainda em desenvolvimento
 - Logaritmo
 
 ## Autor
-Mateus
+Mateus Gonçalves Teteo
