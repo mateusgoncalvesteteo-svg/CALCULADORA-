@@ -2,13 +2,14 @@
 #include <cmath> // operacoes matematicas
 #include <cctype> // tolower e outros
 #include <limits> // apenas numeros nao letras
+#include <string>//vou usar string
+#include <vector>//para criar um historico
+#include <sstream>//importar texto para o historico
 
-using namespace std;//estou mais acostumado a usar assim, talvez mais pra frente eu mude 13/05/2026
+using namespace std;//estou mais acostumado a usar assim.
 
-// 06/05/2026 19:34 , quero adicionar mais operacoes [:)]
-
+//funçao para cada operaçao matematica
 double soma(double num1, double num2) {
-    // criei uma funcao para cada operacao da calculadora, assim a main fica bem mais limpa  
 
     return num1 + num2;
 }
@@ -141,7 +142,7 @@ double operacao(char op, double num1, double num2) {
     }
 }
 
-void limparTela() {//finalmente , hoje( 14/05/2026 ) é o dia que criarei a funçao de limpar a tela, depois de muito estudo
+void limparTela() {//funçao de limpar a tela
 
 #ifdef _WIN32
     system("cls");
@@ -151,9 +152,8 @@ void limparTela() {//finalmente , hoje( 14/05/2026 ) é o dia que criarei a fun�
     
 }
 
-// agora irei criar a funcao menu :)
 
-char menu() {
+char menu() {//funcao menu
 
     char operacao;
 
@@ -172,41 +172,74 @@ char menu() {
         cout << "5. Potencia [^]\n";
         cout << "6. Logaritmo [log]\n";
         cout << "7. Sair\n";
+        cout << "8. Historico\n";//historico ira aparecere no menu
 
         cout << "Opcao: ";
         cin >> operacao;
 
-        if (operacao < '1' || operacao > '7') {
-            cout << "Apenas numeros da lista!\n";
+        if (operacao < '1' || operacao > '8') {//todos os char do menu
+            cout << "Apenas numeros da lista!\n";//funcionara como uma validaçao
         }
 
-    } while (operacao < '1' || operacao > '7');
+    } while (operacao < '1' || operacao > '8');
 
     return operacao;
 }
 
-// 07/05/2026 07:32
-// hora de fazer as modificacoes [:)]
+void mostrarHistorico(vector<string>& historico) {//funcao mostrar historico
 
-int main() {
+    cout << "\n========== HISTORICO ==========\n";
 
-    // hoje 11/05/2026 irei criar
-    // uma funcao pra cada operacao matematica
+    if (historico.empty()) {
+
+        cout << "Ainda nao houve nenhuma operacao.\n";//caso nao tenha sido feito nehuma operaçao
+
+    } else {
+
+        for (int i = 0; i < historico.size(); i++) {
+    //para mostrar desde o indice 0 do vetor até o ultimo, todas as operaçoes feitas
+            cout << i + 1 << ". " << historico[i] << endl;
+        }
+    }
+
+    cout << "===============================\n";//uma estetica mais amigavel
+}
+
+void salvarHistorico(vector<string>& historico, string operacao) {//funçao para salvar o historico
+
+    historico.push_back(operacao);//push_back vai estar armazenando tudo o que acontece
+}
+
+int main() {//funçao principal
+
 
     double num1, num2, resultado;
 
     char opcao;
     char continuar;
+    
+    vector<string> historico;
 
     do {
 
-        limparTela();//finalmente ela foi adicionada ao codigo :) 14/05/2026.
+        limparTela();
         //minha maquina usa o sistema operacional do windows 11, mas eu adicionei um else na funçao pra caso tenha linux tbm ;)
         
         opcao = menu();
 
         if (opcao == '7') {
             break;
+        }
+        
+        if (opcao == '8') {
+        mostrarHistorico(historico);
+
+        cout << "\nPressione ENTER para voltar ao menu...";//agora ele nao aparece e some instataneamente
+    
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.get();
+
+        continue;
         }
 
         // antes aqui existiam varios ifs
@@ -216,6 +249,29 @@ int main() {
 
         //antes existia um swicht(op) aqui
         resultado = operacao(opcao, num1, num2);
+        
+        stringstream ss;
+
+        if (opcao == '6') {
+
+        ss << "log base " << num1 << " de " << num2 << " = " << resultado;//esse caso é especifico para logaritmos.
+
+        } else {
+
+            char opChar;
+
+            switch (opcao) {//quano o historico for selecionado , vai aparecer um historico bem mais bonito, do que so numeros soltos.
+                case '1': opChar = '+'; break;
+                case '2': opChar = '-'; break;
+                case '3': opChar = '*'; break;
+                case '4': opChar = '/'; break;
+                case '5': opChar = '^'; break;
+            }
+
+        ss << num1 << " " << opChar << " " << num2 << " = " << resultado;
+        }
+
+        salvarHistorico(historico, ss.str());//passou aqui e quis rodar denovo fica salvo
 
         cout << "Resultado: " << resultado << endl;
 
