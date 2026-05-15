@@ -9,6 +9,6 @@ Ainda em desenvolvimento
 - Divisão
 - Potenciação
 - Logaritmo
-
+- Histórico
 ## Autor
 Mateus Gonçalves Teteo
