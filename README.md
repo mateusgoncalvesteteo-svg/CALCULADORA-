@@ -1,14 +1,30 @@
-# Calculadora em C++
+# CLI Calculator in C++
+A terminal calculator built in c++ with:
+- input validationte
+- operating history
+- logarithm and power support
+- robust error handling
 
-Projeto simples de calculadora feita em C++.
-Ainda em desenvolvimento
-## Funções
-- Soma
-- Subtração
-- Multiplicação
-- Divisão
-- Potenciação
-- Logaritmo
-- Histórico
-## Autor
-Mateus Gonçalves Teteo
+# Features
+- Addition
+- Subtraction
+- Mutiplication
+- Divison
+- Power
+- Logarithm
+- Operating history
+
+# Tecnologies
+- C++
+- STL ( vector, stringstream )
+- Input validation with cin.clear()
+
+# Future improviments
+- GUI version
+- Better architecture
+- Scientific functions
+- Cross-plataform screen handling
+
+# How to run
+G++ main.cpp -o calc
+./calc
