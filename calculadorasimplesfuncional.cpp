@@ -1,16 +1,16 @@
-#include <iostream> // cin e cout
-#include <cmath> // operacoes matematicas
-#include <cctype> // tolower e outros
-#include <limits> // apenas numeros nao letras
-#include <string>//vou usar string
-#include <vector>//para criar um historico
-#include <sstream>//importar texto para o historico
+#include <iostream> // Entrada e saída de dados
+#include <cmath> // Operações matemáticas e NAN
+#include <cctype> // Funções como tolower()
+#include <limits> // Controle de entrada inválida
+#include <string> // Manipulação de strings
+#include <vector> // Estrutura para armazenar histórico
+#include <sstream> // Conversão de dados para texto formatado
 
-using namespace std;//estou mais acostumado a usar assim.
+using namespace std;
 
-//funçao para cada operaçao matematica
+// ==================== OPERACOES MATEMATICAS ====================
+
 double soma(double num1, double num2) {
-
     return num1 + num2;
 }
 
@@ -24,34 +24,38 @@ double multiplicacao(double num1, double num2) {
 
 double divisao(double num1, double num2) {
 
+    // Evita divisao por zero
     if (num2 != 0) {
         return num1 / num2;
 
     } else {
-        cout << "Erro divisao por 0!\n";
-        return 0;
+
+        cout << "Erro: divisao por zero!\n";
+
+        return NAN;
     }
 }
 
 double potenciacao(double base, double expoente) {
 
-    // em vez de deixar: digite o primeiro numero e o segundo
-    // irei deixar:  digite a base e o expoente
-
+    // Calcula potencia utilizando a funcao pow()
     return pow(base, expoente);
 }
 
-double logaritmo(double num1, double num2) {
+double logaritmo(double base, double logaritmando) {
 
-    // log(base) do logaritmando
+    // Validacao matematica do logaritmo
+    if (base <= 0 || base == 1 || logaritmando <= 0) {
 
-    if (num1 <= 0 || num1 == 1 || num2 <= 0) {
-        cout << "Logaritmo invalido\n";
-        return 0;
+        cout << "Logaritmo invalido!\n";
+
+        return NAN;
     }
 
-    return log(num2) / log(num1);
+    return log(logaritmando) / log(base);
 }
+
+// ==================== VALIDACAO DE ENTRADA ====================
 
 double lerNumero() {
 
@@ -59,6 +63,7 @@ double lerNumero() {
 
     while (true) {
 
+        // Retorna o valor caso a entrada seja valida
         if (cin >> num) {
             return num;
 
@@ -66,8 +71,10 @@ double lerNumero() {
 
             cout << "Digite apenas numeros: ";
 
+            // Limpa estado de erro do cin
             cin.clear();
-            
+
+            // Descarta caracteres invalidos restantes
             cin.ignore(
                 numeric_limits<streamsize>::max(),
                 '\n'
@@ -76,13 +83,14 @@ double lerNumero() {
     }
 }
 
+// ==================== ENTRADA DOS NUMEROS ====================
+
 void pedirNumeros(char operacao, double &num1, double &num2) {
 
-    // funcao criada para evitar muitos ifs na main()
-
+    // Personaliza a entrada dependendo da operacao
     switch (operacao) {
 
-        case '5': // potenciacao
+        case '5': // Potenciacao
 
             cout << "Digite a base: ";
             num1 = lerNumero();
@@ -92,7 +100,7 @@ void pedirNumeros(char operacao, double &num1, double &num2) {
 
             break;
 
-        case '6': // logaritmo
+        case '6': // Logaritmo
 
             cout << "Digite a base: ";
             num1 = lerNumero();
@@ -102,7 +110,7 @@ void pedirNumeros(char operacao, double &num1, double &num2) {
 
             break;
 
-        default: // demais operacoes
+        default: // Demais operacoes
 
             cout << "Digite o primeiro numero: ";
             num1 = lerNumero();
@@ -113,6 +121,8 @@ void pedirNumeros(char operacao, double &num1, double &num2) {
             break;
     }
 }
+
+// ==================== EXECUCAO DAS OPERACOES ====================
 
 double operacao(char op, double num1, double num2) {
 
@@ -137,23 +147,29 @@ double operacao(char op, double num1, double num2) {
             return logaritmo(num1, num2);
 
         default:
+
             cout << "Operacao invalida!\n";
-            return 0;
+
+            return NAN;
     }
 }
 
-void limparTela() {//funçao de limpar a tela
+// ==================== LIMPEZA DE TELA ====================
 
+void limparTela() {
+
+    // Compatibilidade entre Windows e Linux
 #ifdef _WIN32
     system("cls");
 #else
     system("clear");
 #endif
-    
+
 }
 
+// ==================== MENU PRINCIPAL ====================
 
-char menu() {//funcao menu
+char menu() {
 
     char operacao;
 
@@ -172,13 +188,15 @@ char menu() {//funcao menu
         cout << "5. Potencia [^]\n";
         cout << "6. Logaritmo [log]\n";
         cout << "7. Sair\n";
-        cout << "8. Historico\n";//historico ira aparecere no menu
+        cout << "8. Historico\n";
 
         cout << "Opcao: ";
         cin >> operacao;
 
-        if (operacao < '1' || operacao > '8') {//todos os char do menu
-            cout << "Apenas numeros da lista!\n";//funcionara como uma validaçao
+        // Valida apenas opcoes existentes no menu
+        if (operacao < '1' || operacao > '8') {
+
+            cout << "Digite apenas numeros da lista!\n";
         }
 
     } while (operacao < '1' || operacao > '8');
@@ -186,81 +204,92 @@ char menu() {//funcao menu
     return operacao;
 }
 
-void mostrarHistorico(vector<string>& historico) {//funcao mostrar historico
+// ==================== HISTORICO ====================
+
+void mostrarHistorico(vector<string>& historico) {
 
     cout << "\n========== HISTORICO ==========\n";
 
     if (historico.empty()) {
 
-        cout << "Ainda nao houve nenhuma operacao.\n";//caso nao tenha sido feito nehuma operaçao
+        cout << "Nenhuma operacao realizada.\n";
 
     } else {
 
+        // Exibe todas as operacoes armazenadas
         for (int i = 0; i < historico.size(); i++) {
-    //para mostrar desde o indice 0 do vetor até o ultimo, todas as operaçoes feitas
+
             cout << i + 1 << ". " << historico[i] << endl;
         }
     }
 
-    cout << "===============================\n";//uma estetica mais amigavel
+    cout << "===============================\n";
 }
 
-void salvarHistorico(vector<string>& historico, string operacao) {//funçao para salvar o historico
+void salvarHistorico(vector<string>& historico, string operacao) {
 
-    historico.push_back(operacao);//push_back vai estar armazenando tudo o que acontece
+    // Adiciona nova operacao ao vetor
+    historico.push_back(operacao);
 }
 
-int main() {//funçao principal
+// ==================== FUNCAO PRINCIPAL ====================
 
+int main() {
 
     double num1, num2, resultado;
 
     char opcao;
     char continuar;
-    
+
     vector<string> historico;
 
     do {
 
         limparTela();
-        //minha maquina usa o sistema operacional do windows 11, mas eu adicionei um else na funçao pra caso tenha linux tbm ;)
-        
+
         opcao = menu();
 
+        // Encerra o programa
         if (opcao == '7') {
             break;
         }
-        
+
+        // Exibe o historico de operacoes
         if (opcao == '8') {
-        mostrarHistorico(historico);
 
-        cout << "\nPressione ENTER para voltar ao menu...";//agora ele nao aparece e some instataneamente
-    
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cin.get();
+            mostrarHistorico(historico);
 
-        continue;
+            cout << "\nPressione ENTER para voltar ao menu...";
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.get();
+
+            continue;
         }
-
-        // antes aqui existiam varios ifs
-        // agora apenas uma funcao
 
         pedirNumeros(opcao, num1, num2);
 
-        //antes existia um swicht(op) aqui
         resultado = operacao(opcao, num1, num2);
-        
+
         stringstream ss;
 
+        // Formatacao especial para logaritmo
         if (opcao == '6') {
 
-        ss << "log base " << num1 << " de " << num2 << " = " << resultado;//esse caso é especifico para logaritmos.
+            ss << "log base "
+               << num1
+               << " de "
+               << num2
+               << " = "
+               << resultado;
 
         } else {
 
             char opChar;
 
-            switch (opcao) {//quano o historico for selecionado , vai aparecer um historico bem mais bonito, do que so numeros soltos.
+            // Define simbolo correspondente da operacao
+            switch (opcao) {
+
                 case '1': opChar = '+'; break;
                 case '2': opChar = '-'; break;
                 case '3': opChar = '*'; break;
@@ -268,15 +297,28 @@ int main() {//funçao principal
                 case '5': opChar = '^'; break;
             }
 
-        ss << num1 << " " << opChar << " " << num2 << " = " << resultado;
+            ss << num1
+               << " "
+               << opChar
+               << " "
+               << num2
+               << " = "
+               << resultado;
         }
 
-        salvarHistorico(historico, ss.str());//passou aqui e quis rodar denovo fica salvo
+        salvarHistorico(historico, ss.str());
 
-        cout << "Resultado: " << resultado << endl;
+        // Verifica se o resultado e invalido
+        if (isnan(resultado)) {
 
-        // validacao do char (s/n)
+            cout << "Nao foi possivel realizar a operacao.\n";
 
+        } else {
+
+            cout << "Resultado: " << resultado << endl;
+        }
+
+        // Validacao da resposta do usuario
         do {
 
             cout << "Deseja rodar o codigo novamente? (s/n): ";
@@ -286,8 +328,8 @@ int main() {//funçao principal
 
             if (continuar != 's' && continuar != 'n') {
 
-                cout << "Entrada invalida!"
-                     << " Digite apenas 's' ou 'n'.\n";
+                cout << "Entrada invalida! "
+                     << "Digite apenas 's' ou 'n'.\n";
             }
 
         } while (continuar != 's' && continuar != 'n');
