@@ -1,4 +1,4 @@
-#include <iostream> // Entrada e saída de dados
+#include <iostream> // Entrada e saída de dados 
 #include <cmath> // Operações matemáticas e NAN
 #include <cctype> // Funções como tolower()
 #include <limits> // Controle de entrada inválida
